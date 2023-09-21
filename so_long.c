@@ -6,7 +6,7 @@
 /*   By: izanoni <izanoni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 20:36:20 by izanoni           #+#    #+#             */
-/*   Updated: 2023/09/20 20:02:42 by izanoni          ###   ########.fr       */
+/*   Updated: 2023/09/20 20:50:15 by izanoni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,32 @@ int	main(int argc, char **argv)
 	
 	mlx.mlx_ptr = mlx_init();
 	mlx.win_ptr = mlx_new_window(mlx.mlx_ptr, 600, 300, "janelinha");
-	width = 0;
 	height = 0;
-	while()
+	while (height <= 300)
 	{
-		ft_put_pix (&mlx, width, height);
+		width = height % 100;
+		// width = 0;
+		// if (height %100 == 50)
+		// 	width = 50;
+		while(width <= 600)
+		{
+			ft_put_pix (&mlx, width, height);
+			width = width + 100;
+		}
+		height = height + 50;
 	}
+	// height = 50;
+	// while (height <= 300)
+	// {
+	// 	width = 50;
+	// 	while(width <= 600)
+	// 	{
+	// 		ft_put_pix (&mlx, width, height);
+	// 		width = width + 100;
+	// 	}
+	// 	height = height + 100;
+	// }
+	
 	mlx_hook(mlx.win_ptr, 17, (1L<<17), ft_close, NULL);
 	mlx_hook(mlx.win_ptr, 2, (1L<<0), ft_key, NULL);
 	mlx_loop(mlx.mlx_ptr);
