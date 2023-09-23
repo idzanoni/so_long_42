@@ -6,78 +6,133 @@
 /*   By: izanoni <izanoni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 20:36:20 by izanoni           #+#    #+#             */
-/*   Updated: 2023/09/20 20:50:15 by izanoni          ###   ########.fr       */
+/*   Updated: 2023/09/23 17:58:24 by izanoni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-char 	**read_map(char **argv);
+char	**read_map(char **argv);
 int		ft_close(void *v);
-int		ft_key(int tecla, void *k);
-void	ft_put_pix(t_mlx *mlx, int width, int height);
+int		ft_key(int tecla, t_mlx * mlx);
+void	ft_put_pix(t_mlx *mlx, int width, int height, int color);
+int		ft_matrix_len(char **matrix);
+void	draw_map(t_mlx *mlx);
+int		valid_map(t_mlx *mlx);
+void	find_player(t_mlx *mlx);
+
 
 int	main(int argc, char **argv)
 {
 	t_mlx 	mlx;
 	int		width;
-	int		height;
+	int		check;
 	
-	read_map(argv);
-	
+	mlx.map = read_map(argv);
+	check = valid_map (&mlx);
+	if (check == 1)
+		return (0);
 	mlx.mlx_ptr = mlx_init();
-	mlx.win_ptr = mlx_new_window(mlx.mlx_ptr, 600, 300, "janelinha");
-	height = 0;
-	while (height <= 300)
-	{
-		width = height % 100;
-		// width = 0;
-		// if (height %100 == 50)
-		// 	width = 50;
-		while(width <= 600)
-		{
-			ft_put_pix (&mlx, width, height);
-			width = width + 100;
-		}
-		height = height + 50;
-	}
-	// height = 50;
-	// while (height <= 300)
-	// {
-	// 	width = 50;
-	// 	while(width <= 600)
-	// 	{
-	// 		ft_put_pix (&mlx, width, height);
-	// 		width = width + 100;
-	// 	}
-	// 	height = height + 100;
-	// }
-	
+	mlx.win_ptr = mlx_new_window(mlx.mlx_ptr, (mlx.width * PIXEL), (mlx.height * PIXEL), "so_long");
+	find_player(&mlx);
+	draw_map (&mlx);
 	mlx_hook(mlx.win_ptr, 17, (1L<<17), ft_close, NULL);
-	mlx_hook(mlx.win_ptr, 2, (1L<<0), ft_key, NULL);
+	mlx_hook(mlx.win_ptr, 2, (1L<<0), ft_key, &mlx);
 	mlx_loop(mlx.mlx_ptr);
 }
 
-void	ft_put_pix(t_mlx *mlx, int width, int height)
+int	valid_map(t_mlx *mlx)
+{
+	mlx->height = ft_matrix_len (mlx->map);
+	mlx->width = ft_strlen (mlx->map[0]) - 1;
+	if (mlx->width > 30 || mlx->height > 15)
+	{
+		ft_printf ("The map is too big");
+		return (1);
+	}
+	return (0);
+}
+
+void	draw_map(t_mlx *mlx)
+{
+	int height;
+	int width;
+	
+	height = 0;
+	while (mlx->map[height] != NULL)
+	{
+		width = 0;
+		while(mlx->map[height][width] != '\0')
+		{
+			if (mlx->map[height][width] == 'P')
+				ft_put_pix (mlx, width * PIXEL, height * PIXEL, 0xaaFFFF00);
+			if (mlx->map[height][width] == 'C')
+				ft_put_pix (mlx, width * PIXEL, height * PIXEL, 0xaaFF00FF);
+			if (mlx->map[height][width] == 'E')
+				ft_put_pix (mlx, width * PIXEL, height * PIXEL, 0xaaFF0000);
+			if (mlx->map[height][width] == '0')
+				ft_put_pix (mlx, width * PIXEL, height * PIXEL, 0xaa0000FF);
+			else if (mlx->map[height][width] == '1')
+				ft_put_pix (mlx, width * PIXEL, height * PIXEL, 0xaa00FF00);
+			width++;
+		}
+		height++;
+	}
+}
+
+void	find_player(t_mlx *mlx)
+{
+	int height;
+	int width;
+	
+	height = 0;
+	while (mlx->map[height] != NULL)
+	{
+		width = 0;
+		while(mlx->map[height][width] != '\0')
+		{
+			if (mlx->map[height][width] == 'P')
+			{
+				mlx->player_col = width;
+				mlx->player_line = height;
+				return ;
+			}	
+			width++;
+		}
+		height++;
+	}
+}
+
+int	ft_matrix_len(char **matrix)
+{
+	int	len;
+
+	len = 0;
+	if (matrix == NULL)
+		return (0);
+	while (matrix[len] != NULL)
+	{
+		len++;
+	}
+	return (len);
+}
+
+void	ft_put_pix(t_mlx *mlx, int width, int height, int color)
 {
 	int i;
 	int c;
 	
 	c = 0;
-	while (c <= 50)
+	while (c <= PIXEL)
 	{
 		i = 0;
-		while (i <= 50)
+		while (i <= PIXEL)
 		{
-			mlx_pixel_put(mlx->mlx_ptr, mlx->win_ptr, (width + c), (height + i) , 0xaaFF0000);
-			// mlx_pixel_put(mlx->mlx_ptr, mlx->win_ptr, (width + 100), (height + i) , 0xaaFF0000);
-			// mlx_pixel_put(mlx->mlx_ptr, mlx->win_ptr, (width + i), height , 0xaaFF0000);
-			// mlx_pixel_put(mlx->mlx_ptr, mlx->win_ptr, (width + i), (height + 100) , 0xaaFF0000);
+			mlx_pixel_put(mlx->mlx_ptr, mlx->win_ptr, (width + c), (height + i) , color);
 			i++;
 		}
 		c++;
 	}
-	
 }
 
 int ft_close(void *v)
@@ -85,15 +140,51 @@ int ft_close(void *v)
 	exit(2);
 }
 
-int	ft_key(int tecla, void *k)
+int	ft_key(int tecla, t_mlx * mlx)
 {
 	if (tecla == ESC)
 	{
-		printf("Fechando a janela e encerrando o programa...\n");
+		ft_printf("Fechando a janela e encerrando o programa...\n");
 		exit(0);
 	}
+	else if (tecla == XK_Right)
+	{
+		if ((mlx->map[mlx->player_line][mlx->player_col + 1]) == '1')
+			return (0);
+		mlx->map[mlx->player_line][mlx->player_col + 1] = 'P';
+		mlx->map[mlx->player_line][mlx->player_col] = '0';
+		draw_map(mlx);
+		find_player(mlx);
+	}	
+	else if (tecla == XK_Up)
+	{
+		if ((mlx->map[mlx->player_line - 1][mlx->player_col]) == '1')
+			return (0);
+		mlx->map[mlx->player_line - 1][mlx->player_col] = 'P';
+		mlx->map[mlx->player_line][mlx->player_col] = '0';
+		draw_map(mlx);
+		find_player(mlx);
+	}
+	else if (tecla == XK_Down)
+	{
+		if ((mlx->map[mlx->player_line + 1][mlx->player_col]) == '1')
+			return (0);
+		mlx->map[mlx->player_line + 1][mlx->player_col] = 'P';
+		mlx->map[mlx->player_line][mlx->player_col] = '0';
+		draw_map(mlx);
+		find_player(mlx);
+	}
+	else if (tecla == XK_Left)
+	{
+		if ((mlx->map[mlx->player_line][mlx->player_col - 1]) == '1')
+			return (0);
+		mlx->map[mlx->player_line][mlx->player_col - 1] = 'P';
+		mlx->map[mlx->player_line][mlx->player_col] = '0';
+		draw_map(mlx);
+		find_player(mlx);
+	}
 	else
-		printf("Voce pressionou a tecla: %c\n", tecla);
+		ft_printf("Voce pressionou a tecla: %c\n", tecla);
 	return (0);
 }
 char ** read_map(char **argv)
@@ -126,12 +217,12 @@ char ** read_map(char **argv)
 		i++;
 	}
 	map[i] = NULL;
-	while (map[0] != NULL)
-	{
-		printf("%s", map[0]);
-		map++;
-	}
-	return (0);
+	// while (map[0] != NULL)
+	// {
+	// 	printf("%s", map[0]);
+	// 	map++;
+	// }
+	return (map);
 }
 
 // 	if (argc != 2)
