@@ -6,7 +6,7 @@
 /*   By: izanoni <izanoni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 20:41:45 by izanoni           #+#    #+#             */
-/*   Updated: 2023/09/20 19:05:35 by izanoni          ###   ########.fr       */
+/*   Updated: 2023/09/25 15:58:41 by izanoni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,12 @@
 # include <stdlib.h>
 # include <mlx.h>
 # include <X11/keysym.h>
-	# include <stdio.h>
-# include "get_next_line/get_next_line.h"
-# include "libft/libft.h"
+# include "libs/get_next_line/get_next_line.h"
+# include "libs/libft/libft.h"
+# include "libs/ft_printf/ft_printf.h"
 
 # define MAP_CHARS "01CEP"
-
+# define PIXEL 64
 # define ESC 65307
 
 # define BLUEY_D "textures/bluey_down.xpm"
@@ -43,6 +43,8 @@ typedef struct s_mlx
 	void	*mlx_ptr;
 	void	*win_ptr;
 	char	**map;
+	int		width;
+	int		height;
 	void	*player;
 	int		stars;
 	int		movements;
@@ -58,8 +60,6 @@ typedef struct s_map
 	int		fd;
 	char	**map;
 	int		size;
-	int		width;
-	int		height;
 	int		player;
 	int		exit;
 	int		coin;

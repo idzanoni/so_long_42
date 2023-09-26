@@ -1,0 +1,62 @@
+1. map_gen > 
+	open_file + 
+	read w/ GNL --- result: matriz do arquivo
+2. map_check >
+	valid_positions
+	valid_walls
+	map_check --- result: 0/1
+3. init_game >
+	get_window_size >
+		ft_strlen (width) * sprite_size
+		heigth * sprite_size
+	mlx_init
+	mlx_new_window
+4. img_init >
+	mlx_xpm_file_to_image >
+		space
+		wall
+		collect
+		exit
+		player
+5. map_init >
+	img_draw >
+		wall 1
+		space 0
+		exit E
+		>	mlx_put_image_to_window >
+				img x * sprite_size, img y * sprite_size
+	map_init_hook_c >
+		collect C
+		>	img_draw
+			collect ++
+	map_init_hook_p
+		player P
+		>	img_draw >
+				player
+			x, y
+6. mlx_hook >
+	key_press >
+		esc
+		>	exit_game
+		map_update >
+			hold_w / _a / _s / _d >
+				map[y][x] >
+					change_position
+					collect ++
+					exit_game
+					moves ++
+		map_updater >
+			img_draw -- space / wall / collect / exit
+			map_updete_hook_p >
+				img_draw -- player
+				x, y
+	exit_game
+7. exit_game >
+	free_map >
+		ft_free_ptr -- free *ptr / *ptr = NULL
+	free_game >
+		mlx_destroy_image -- space / wall / collect / exit / player
+		mlx_destroy_window -- game->window
+		mlx_destroy_display -- game->mlx
+		ft_free_ptr -- free *ptr / *ptr = NULL
+	exit

@@ -6,7 +6,7 @@
 /*   By: izanoni <izanoni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 20:36:20 by izanoni           #+#    #+#             */
-/*   Updated: 2023/09/23 17:58:24 by izanoni          ###   ########.fr       */
+/*   Updated: 2023/09/26 14:38:48 by izanoni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,9 @@ int		ft_key(int tecla, t_mlx * mlx);
 void	ft_put_pix(t_mlx *mlx, int width, int height, int color);
 int		ft_matrix_len(char **matrix);
 void	draw_map(t_mlx *mlx);
-int		valid_map(t_mlx *mlx);
+int		valid_map_size(t_mlx *mlx);
 void	find_player(t_mlx *mlx);
+int		valid_map_name(int arg_c, char **arg_v);
 
 
 int	main(int argc, char **argv)
@@ -28,8 +29,9 @@ int	main(int argc, char **argv)
 	int		width;
 	int		check;
 	
+	valid_map_name(argc, argv);
 	mlx.map = read_map(argv);
-	check = valid_map (&mlx);
+	check = valid_map_size (&mlx);
 	if (check == 1)
 		return (0);
 	mlx.mlx_ptr = mlx_init();
@@ -41,14 +43,40 @@ int	main(int argc, char **argv)
 	mlx_loop(mlx.mlx_ptr);
 }
 
-int	valid_map(t_mlx *mlx)
+int	valid_map_name(int arg_c, char **arg_v)
+{
+	int	size;
+
+	if (arg_c != 2)
+	{
+		ft_printf("Missing map\nMust be: 'so_long.a ./so_long <filename>.ber'");
+		return (1);
+	}
+	size = ft_strlen(arg_v[1]);
+	if (size < 5 || ft_strncmp(".ber", arg_v[1] + size - 4, 5))
+	{
+		ft_printf("Wrong extension\nMust be: ./so_long <filename>.ber\n");
+		return (1);
+	}
+	return (0);
+}
+
+
+int	valid_map_size(t_mlx *mlx)
 {
 	mlx->height = ft_matrix_len (mlx->map);
 	mlx->width = ft_strlen (mlx->map[0]) - 1;
 	if (mlx->width > 30 || mlx->height > 15)
 	{
-		ft_printf ("The map is too big");
+		ft_printf ("The map is too big.");
+		exit(0);
 		return (1);
+	}
+	else if (mlx->width < 5 || mlx->height < 3)
+	{
+		ft_printf ("The map is too small");
+		exit(0);
+		return (2);
 	}
 	return (0);
 }
@@ -217,11 +245,6 @@ char ** read_map(char **argv)
 		i++;
 	}
 	map[i] = NULL;
-	// while (map[0] != NULL)
-	// {
-	// 	printf("%s", map[0]);
-	// 	map++;
-	// }
 	return (map);
 }
 
