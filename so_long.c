@@ -6,7 +6,7 @@
 /*   By: izanoni <izanoni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 20:36:20 by izanoni           #+#    #+#             */
-/*   Updated: 2023/09/26 14:38:48 by izanoni          ###   ########.fr       */
+/*   Updated: 2023/09/29 18:45:49 by izanoni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,21 @@
 
 char	**read_map(char **argv);
 int		ft_close(void *v);
-int		ft_key(int tecla, t_mlx * mlx);
+int		ft_key(int tecla, t_mlx *mlx);
 void	ft_put_pix(t_mlx *mlx, int width, int height, int color);
 int		ft_matrix_len(char **matrix);
 void	draw_map(t_mlx *mlx);
 int		valid_map_size(t_mlx *mlx);
 void	find_player(t_mlx *mlx);
 int		valid_map_name(int arg_c, char **arg_v);
-
+int		xpm_to_img(t_mlx *mlx);
 
 int	main(int argc, char **argv)
 {
-	t_mlx 	mlx;
+	t_mlx	mlx;
 	int		width;
 	int		check;
-	
+
 	valid_map_name(argc, argv);
 	mlx.map = read_map(argv);
 	check = valid_map_size (&mlx);
@@ -37,10 +37,24 @@ int	main(int argc, char **argv)
 	mlx.mlx_ptr = mlx_init();
 	mlx.win_ptr = mlx_new_window(mlx.mlx_ptr, (mlx.width * PIXEL), (mlx.height * PIXEL), "so_long");
 	find_player(&mlx);
+	xpm_to_img(&mlx);
 	draw_map (&mlx);
-	mlx_hook(mlx.win_ptr, 17, (1L<<17), ft_close, NULL);
-	mlx_hook(mlx.win_ptr, 2, (1L<<0), ft_key, &mlx);
-	mlx_loop(mlx.mlx_ptr);
+	mlx_hook (mlx.win_ptr, 17, (1L << 17), ft_close, NULL);
+	mlx_hook (mlx.win_ptr, 2, (1L << 0), ft_key, &mlx);
+	mlx_loop (mlx.mlx_ptr);
+}
+
+int	xpm_to_img(t_mlx *mlx)
+{
+	int	width;
+	int	height;
+
+	mlx->bluey_d = mlx_xpm_file_to_image(mlx->mlx_ptr, BLUEY_D, &width, &height);
+	if (!mlx->bluey_d)
+	{
+		exit (0);
+	}
+	return (0);
 }
 
 int	valid_map_name(int arg_c, char **arg_v)
@@ -60,7 +74,6 @@ int	valid_map_name(int arg_c, char **arg_v)
 	}
 	return (0);
 }
-
 
 int	valid_map_size(t_mlx *mlx)
 {
@@ -83,17 +96,18 @@ int	valid_map_size(t_mlx *mlx)
 
 void	draw_map(t_mlx *mlx)
 {
-	int height;
-	int width;
-	
+	int	height;
+	int	width;
+
 	height = 0;
 	while (mlx->map[height] != NULL)
 	{
 		width = 0;
-		while(mlx->map[height][width] != '\0')
+		while (mlx->map[height][width] != '\0')
 		{
 			if (mlx->map[height][width] == 'P')
-				ft_put_pix (mlx, width * PIXEL, height * PIXEL, 0xaaFFFF00);
+				// ft_put_pix (mlx, width * PIXEL, height * PIXEL, 0xaaFFFF00);
+				mlx_put_image_to_window(mlx->mlx_ptr, mlx->win_ptr, mlx->bluey_d, width * PIXEL, height * PIXEL);
 			if (mlx->map[height][width] == 'C')
 				ft_put_pix (mlx, width * PIXEL, height * PIXEL, 0xaaFF00FF);
 			if (mlx->map[height][width] == 'E')
@@ -110,14 +124,14 @@ void	draw_map(t_mlx *mlx)
 
 void	find_player(t_mlx *mlx)
 {
-	int height;
-	int width;
-	
+	int	height;
+	int	width;
+
 	height = 0;
 	while (mlx->map[height] != NULL)
 	{
 		width = 0;
-		while(mlx->map[height][width] != '\0')
+		while (mlx->map[height][width] != '\0')
 		{
 			if (mlx->map[height][width] == 'P')
 			{
@@ -147,9 +161,9 @@ int	ft_matrix_len(char **matrix)
 
 void	ft_put_pix(t_mlx *mlx, int width, int height, int color)
 {
-	int i;
-	int c;
-	
+	int	i;
+	int	c;
+
 	c = 0;
 	while (c <= PIXEL)
 	{
@@ -168,7 +182,7 @@ int ft_close(void *v)
 	exit(2);
 }
 
-int	ft_key(int tecla, t_mlx * mlx)
+int	ft_key(int tecla, t_mlx *mlx)
 {
 	if (tecla == ESC)
 	{
@@ -215,21 +229,22 @@ int	ft_key(int tecla, t_mlx * mlx)
 		ft_printf("Voce pressionou a tecla: %c\n", tecla);
 	return (0);
 }
-char ** read_map(char **argv)
+
+char **read_map(char **argv)
 {
-	int fd;
-	int count_line;
-	int i;
-	char *line;
-	char **map;
-	
+	int		fd;
+	int		count_line;
+	int		i;
+	char	*line;
+	char	**map;
+
 	fd = open(argv[1], O_RDONLY);
 	count_line = 0;
 	while (1)
 	{
 		line = get_next_line(fd);
 		if (line == NULL)
-			break;
+			break ;
 		count_line++;
 	}
 	close (fd);
@@ -240,7 +255,7 @@ char ** read_map(char **argv)
 	{
 		line = get_next_line(fd);
 		if (line == NULL)
-			break;
+			break ;
 		map[i] = line;
 		i++;
 	}

@@ -6,7 +6,7 @@
 /*   By: izanoni <izanoni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 20:41:45 by izanoni           #+#    #+#             */
-/*   Updated: 2023/09/25 15:58:41 by izanoni          ###   ########.fr       */
+/*   Updated: 2023/09/26 19:06:18 by izanoni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,17 @@ typedef struct s_mlx
 	int		line;
 	int		player_line;
 	int		player_col;
+	void	*bluey_d;
+	void	*bluey_l;
+	void	*bluey_r;
+	void	*bluey_u;
+	void	*exit_c;
+	void	*exit_o;
+	void	*tile;
+	void	*wall;
+	void	*cactus;
+	void	*balloon;
+	void	*win;
 }			t_mlx;
 
 typedef struct s_map
