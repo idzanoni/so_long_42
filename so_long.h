@@ -6,7 +6,7 @@
 /*   By: izanoni <izanoni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 20:41:45 by izanoni           #+#    #+#             */
-/*   Updated: 2023/10/02 12:11:19 by izanoni          ###   ########.fr       */
+/*   Updated: 2023/10/09 20:00:53 by izanoni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,56 +46,23 @@ typedef struct s_mlx
 	int			width;
 	int			height;
 	void		*player;
-	int			stars;
-	int			movements;
+	int			collect;
+	int			moves;
 	int			col;
 	int			line;
 	int			player_line;
 	int			player_col;
+	void		*bluey_d;
+	void		*bluey_l;
+	void		*bluey_r;
+	void		*bluey_u;
+	void		*exit_c;
+	void		*exit_o;
+	void		*tile;
+	void		*wall;
+	void		*cactus;
+	void		*balloon;
+	void		*win;
 }			t_mlx;
-
-typedef struct s_map
-{
-	char	*file;
-	int		fd;
-	char	**map;
-	int		size;
-	int		player;
-	int		exit;
-	int		coin;
-	int		coin_count;
-	int		player_x;
-	int		player_y;
-	int		exit_x;
-	int		exit_y;
-	int		path_check;
-	int		check_format;
-}			t_map;
-
-typedef struct s_sprite
-{
-	void	*bluey_d;
-	void	*bluey_l;
-	void	*bluey_r;
-	void	*bluey_u;
-	void	*exit_c;
-	void	*exit_o;
-	void	*tile;
-	void	*wall;
-	void	*cactus;
-	void	*balloon;
-	void	*win;
-}			t_sprite;
-
-typedef struct s_game
-{
-	void		*mlx;
-	void		*window;
-	int			img_width;
-	int			img_height;
-	int			moves;
-	t_sprite	*spt;
-	t_map		*map;
-}			t_game;
 
 #endif
