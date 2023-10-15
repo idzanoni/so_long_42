@@ -6,7 +6,7 @@
 /*   By: izanoni <izanoni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/13 15:41:18 by izanoni           #+#    #+#             */
-/*   Updated: 2023/10/13 16:17:21 by izanoni          ###   ########.fr       */
+/*   Updated: 2023/10/15 16:30:29 by izanoni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,12 +104,5 @@ int	valid_chars(t_mlx *mlx)
 		}
 		y++;
 	}
-	return (0);
-}
-
-int	check_map_format(t_mlx *mlx)
-{
-	int	y;
-
 	return (0);
 }

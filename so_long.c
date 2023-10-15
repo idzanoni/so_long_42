@@ -6,7 +6,7 @@
 /*   By: izanoni <izanoni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 20:36:20 by izanoni           #+#    #+#             */
-/*   Updated: 2023/10/13 16:43:52 by izanoni          ###   ########.fr       */
+/*   Updated: 2023/10/15 16:34:07 by izanoni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 int	main(int argc, char **argv)
 {
 	t_mlx		mlx;
-	int			width;
 	int			check;
 
 	valid_map_name(argc, argv);
@@ -39,4 +38,11 @@ int	main(int argc, char **argv)
 	mlx_hook (mlx.win_ptr, 17, (1L << 17), ft_close, NULL);
 	mlx_hook (mlx.win_ptr, 2, (1L << 0), ft_key, &mlx);
 	mlx_loop (mlx.mlx_ptr);
+}
+
+int	check_map_format(t_mlx *mlx)
+{
+	int	y;
+
+	return (0);
 }
