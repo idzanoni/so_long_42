@@ -6,7 +6,7 @@
 /*   By: izanoni <izanoni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/13 15:26:24 by izanoni           #+#    #+#             */
-/*   Updated: 2023/10/15 16:33:07 by izanoni          ###   ########.fr       */
+/*   Updated: 2023/10/15 21:04:16 by izanoni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,23 +25,25 @@ void	ft_put_sprites(t_mlx *mlx)
 	ft_xpm_to_img(mlx, &mlx->cactus, CACTUS);
 	ft_xpm_to_img(mlx, &mlx->balloon, BALLOON);
 	ft_xpm_to_img(mlx, &mlx->win, WIN);
+	mlx->player = mlx->bluey_d;
+	ft_find_player(mlx);
 }
 
 int	ft_xpm_to_img(t_mlx *mlx, void **image, char *path)
 {
-	int	width;
-	int	height;
+	int	x;
+	int	y;
 
-	*image = mlx_xpm_file_to_image(mlx->mlx_ptr, path, &width, &height);
+	*image = mlx_xpm_file_to_image(mlx->mlx_ptr, path, &x, &y);
 	if (*image == NULL)
 	{
 		ft_printf("Error:\nSprites error\n");
-		exit (0);
+		ft_close (mlx);
 	}
 	return (0);
 }
 
-void	draw_map(t_mlx *mlx)
+void	ft_draw_map(t_mlx *mlx)
 {
 	int	y;
 	int	x;
@@ -53,7 +55,7 @@ void	draw_map(t_mlx *mlx)
 		while (mlx->map[y][x] != '\0')
 		{
 			if (mlx->map[y][x] == 'P')
-				ft_img_to_win(mlx, mlx->bluey_d, x, y);
+				ft_img_to_win(mlx, mlx->player, x, y);
 			else if (mlx->map[y][x] == 'C')
 				ft_img_to_win(mlx, mlx->balloon, x, y);
 			else if (mlx->map[y][x] == 'E')

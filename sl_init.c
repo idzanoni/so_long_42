@@ -6,13 +6,13 @@
 /*   By: izanoni <izanoni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/13 16:37:52 by izanoni           #+#    #+#             */
-/*   Updated: 2023/10/13 16:40:25 by izanoni          ###   ########.fr       */
+/*   Updated: 2023/10/15 21:27:55 by izanoni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-char	**read_map(char **argv)
+char	**ft_read_map(char **argv)
 {
 	int		fd;
 	int		count_line;
@@ -83,3 +83,46 @@ void	ft_put_pix(t_mlx *mlx, int width, int height)
 		c++;
 	}
 }
+
+void	ft_swap_n_to_zero(t_mlx *mlx)
+{
+	int	y;
+	int	x;
+
+	y = 0;
+	x = 0;
+	while (mlx->map[y] != NULL)
+	{
+		x = 0;
+		while (mlx->map[y][x] != '\0')
+		{
+			if (mlx->map[y][x] == '\n' || mlx->map[y][x] == '\r')
+				mlx->map[y][x] = '\0';
+			x++;
+		}
+		y++;
+	}
+}
+
+// char	**ft_dup_map(t_mlx *mlx)
+// {
+// 	int		y;
+// 	int		x;
+// 	char	**copy;
+
+// 	copy = malloc((mlx->line + 1) * sizeof(char *));
+// 	y = 0;
+// 	while (mlx->map[y] != NULL)
+// 	{
+// 		copy[y] = ft_strdup(mlx->map[y]);
+// 		if (copy[y] == NULL)
+// 		{
+// 			ft_free_matrix(copy);
+// 			return (NULL);
+// 		}
+// 		copy[y][mlx->col] = '\0';
+// 		y++;
+// 	}
+// 	copy[y] = NULL;
+// 	return (copy);
+// }

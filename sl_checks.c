@@ -6,13 +6,13 @@
 /*   By: izanoni <izanoni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/13 15:41:18 by izanoni           #+#    #+#             */
-/*   Updated: 2023/10/15 16:30:29 by izanoni          ###   ########.fr       */
+/*   Updated: 2023/10/15 21:25:48 by izanoni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-int	valid_map_name(int arg_c, char **arg_v)
+int	ft_valid_map_name(int arg_c, char **arg_v)
 {
 	int	size;
 
@@ -30,29 +30,29 @@ int	valid_map_name(int arg_c, char **arg_v)
 	return (0);
 }
 
-int	valid_map_size(t_mlx *mlx)
+int	ft_valid_map_size(t_mlx *mlx)
 {
 	mlx->height = ft_matrix_len (mlx->map);
-	mlx->width = ft_strlen (mlx->map[0]) - 1;
+	mlx->width = ft_strlen (mlx->map[0]);
 	if (mlx->width > 30 || mlx->height > 15)
 	{
 		ft_printf ("Error:\nThe map is too big.");
-		exit(0);
+		ft_close(mlx);
 	}
 	else if (mlx->width < 5 || mlx->height < 3)
 	{
 		ft_printf ("Error:\nThe map is too small");
-		exit(0);
+		ft_close(mlx);
 	}
 	else if (mlx->width == mlx->height)
 	{
 		ft_printf ("Error:\nThe map must be rectangular");
-		exit(0);
+		ft_close(mlx);
 	}
 	return (0);
 }
 
-int	check_border(t_mlx *mlx)
+int	ft_check_border(t_mlx *mlx)
 {
 	int	i;
 	int	max;
@@ -75,13 +75,13 @@ int	check_border(t_mlx *mlx)
 	}
 	if (i != max)
 	{
-		ft_printf("Invalid wall\n");
-		return (1);
+		ft_printf("Error:\nInvalid wall\n");
+		ft_close(mlx);
 	}
 	return (0);
 }
 
-int	valid_chars(t_mlx *mlx)
+int	ft_valid_chars(t_mlx *mlx)
 {
 	int	y;
 	int	x;
@@ -97,12 +97,39 @@ int	valid_chars(t_mlx *mlx)
 				&& mlx->map[y][x] != 'P' && mlx->map[y][x] != 'C'
 				&& mlx->map[y][x] != '1' && mlx->map[y][x] != '\n')
 			{
-				ft_printf("Invalid char on map\n");
-				return (1);
+				ft_printf("Error:\nInvalid char on map\n");
+				ft_close(mlx);
 			}
 			x++;
 		}
 		y++;
+	}
+	return (0);
+}
+
+int	ft_count_collectibles(t_mlx *mlx)
+{
+	int	x;
+	int	y;
+
+	y = 0;
+	while (mlx->map[y] != NULL)
+	{
+		x = 0;
+		while (mlx->map[y][x] != '\0')
+		{
+			if (mlx->map[y][x] == 'C')
+			{
+				mlx->collect = mlx->collect + 1;
+			}
+			x++;
+		}
+		y++;
+	}
+	if (mlx->collect == 0)
+	{
+		ft_printf("Error:\nMissing collectibles\n");
+		ft_close(mlx);
 	}
 	return (0);
 }

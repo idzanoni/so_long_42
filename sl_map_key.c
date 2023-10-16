@@ -6,7 +6,7 @@
 /*   By: izanoni <izanoni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/13 15:45:30 by izanoni           #+#    #+#             */
-/*   Updated: 2023/10/13 16:39:13 by izanoni          ###   ########.fr       */
+/*   Updated: 2023/10/15 20:46:30 by izanoni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,69 +44,76 @@ int	ft_matrix_len(char **matrix)
 
 int	ft_key(int key, t_mlx *mlx)
 {
-	if (key == ESC)
-	{
-		ft_printf("Closing the window and ending the program...\n");
-		exit (0);
-	}
+	if (key == XK_Escape)
+		ft_close (mlx + \
+		ft_printf ("Closing the window and ending the program...\n") * 0);
 	else if (key == XK_d || key == XK_D || key == XK_Right)
-		key_moves(mlx, 0, 1);
+	{
+		mlx->player = mlx->bluey_r;
+		ft_key_moves (mlx, 0, 1);
+	}	
 	else if (key == XK_w || key == XK_W || key == XK_Up)
-		key_moves(mlx, -1, 0);
+	{
+		mlx->player = mlx->bluey_u;
+		ft_key_moves (mlx, -1, 0);
+	}
 	else if (key == XK_s || key == XK_S || key == XK_Down)
-		key_moves(mlx, 1, 0);
+	{
+		mlx->player = mlx->bluey_d;
+		ft_key_moves (mlx, 1, 0);
+	}
 	else if (key == XK_a || key == XK_A || key == XK_Left)
-		key_moves(mlx, 0, -1);
-	else
-		ft_printf("Key: %c\n", key);
+	{
+		mlx->player = mlx->bluey_l;
+		ft_key_moves (mlx, 0, -1);
+	}
 	return (0);
 }
 
-void	key_moves(t_mlx *mlx, int sum_y, int sum_x)
+int	ft_key_moves(t_mlx *mlx, int sum_y, int sum_x)
 {
-	find_player(mlx);
-	if (mlx->map[mlx->player_line + (sum_y)][mlx->player_col + (sum_x)] == '0')
+	if (mlx->map[mlx->player_line + sum_y][mlx->player_col + sum_x] == '0'
+		|| mlx->map[mlx->player_line + sum_y][mlx->player_col + sum_x] == 'C')
 	{
-		mlx->map[mlx->player_line + (sum_y)][mlx->player_col + (sum_x)] = 'P';
+		if (mlx->map[mlx->player_line + sum_y][mlx->player_col + sum_x] == 'C')
+			mlx->collect --;
+		mlx->map[mlx->player_line + sum_y][mlx->player_col + sum_x] = 'P';
 		mlx->map[mlx->player_line][mlx->player_col] = '0';
 		mlx->moves ++;
+		mlx->player_line = mlx->player_line + sum_y;
+		mlx->player_col = mlx->player_col + sum_x;
 	}
-	if (mlx->map[mlx->player_line + (sum_y)][mlx->player_col + (sum_x)] == 'C')
-	{
-		mlx->map[mlx->player_line + (sum_y)][mlx->player_col + (sum_x)] = 'P';
-		mlx->map[mlx->player_line][mlx->player_col] = '0';
-		mlx->collect --;
-		mlx->moves ++;
-	}
-	if (mlx->map[mlx->player_line + (sum_y)][mlx->player_col + (sum_x)] == 'E' \
+	if (mlx->map[mlx->player_line + sum_y][mlx->player_col + sum_x] == 'E' \
 		&& mlx->collect == 0)
 	{
 		mlx->map[mlx->player_line][mlx->player_col] = '0';
 		mlx->moves ++;
 		ft_printf("\nNice park spot, Rita!\n");
+		ft_close(mlx);
 	}
-	draw_map(mlx);
+	ft_draw_map(mlx);
+	return (1);
 }
 
-void	find_player(t_mlx *mlx)
+void	ft_find_player(t_mlx *mlx)
 {
-	int	height;
-	int	width;
+	int	y;
+	int	x;
 
-	height = 0;
-	while (mlx->map[height] != NULL)
+	y = 0;
+	while (mlx->map[y] != NULL)
 	{
-		width = 0;
-		while (mlx->map[height][width] != '\0')
+		x = 0;
+		while (mlx->map[y][x] != '\0')
 		{
-			if (mlx->map[height][width] == 'P')
+			if (mlx->map[y][x] == 'P')
 			{
-				mlx->player_col = width;
-				mlx->player_line = height;
+				mlx->player_col = x;
+				mlx->player_line = y;
 				return ;
 			}	
-			width++;
+			x++;
 		}
-		height++;
+		y++;
 	}
 }
