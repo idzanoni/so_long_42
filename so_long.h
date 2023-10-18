@@ -6,7 +6,7 @@
 /*   By: izanoni <izanoni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/15 21:33:29 by izanoni           #+#    #+#             */
-/*   Updated: 2023/10/18 16:36:41 by izanoni          ###   ########.fr       */
+/*   Updated: 2023/10/18 20:17:25 by izanoni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,12 +72,12 @@ int		ft_count_line(int fd);
 int		ft_check_border(t_mlx *mlx);
 int		ft_valid_chars(t_mlx *mlx);
 int		ft_check_map_format(t_mlx *mlx);
-int		ft_check_all(t_mlx *mlx);
 int		ft_count_collectibles(t_mlx *mlx);
 int		ft_count_exit(t_mlx *mlx);
 int		ft_count_player(t_mlx *mlx);
 int		ft_key_moves(t_mlx *mlx, int sum_y, int sum_x);
 int		ft_draw_map(t_mlx *mlx);
+void	ft_check_all(t_mlx *mlx);
 void	ft_find_player(t_mlx *mlx);
 void	ft_put_sprites(t_mlx *mlx);
 void	ft_struct_init(t_mlx *mlx);
@@ -88,5 +88,6 @@ void	ft_swap_n_to_zero(t_mlx *mlx);
 void	ft_adjust_drawing(t_mlx *mlx);
 void	ft_flood_fill(char **copy, int y, int x);
 void	ft_flood_fill_check(char **copy, t_mlx *mlx);
+void	ft_close_img(t_mlx *mlx, void **image);
 
 #endif

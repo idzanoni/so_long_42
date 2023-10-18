@@ -6,7 +6,7 @@
 /*   By: izanoni <izanoni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/13 15:41:18 by izanoni           #+#    #+#             */
-/*   Updated: 2023/10/18 16:52:47 by izanoni          ###   ########.fr       */
+/*   Updated: 2023/10/18 20:17:01 by izanoni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,31 +114,21 @@ char	**ft_dup_map(t_mlx *mlx)
 	return (copy);
 }
 
-int	ft_check_all(t_mlx *mlx)
+void	ft_check_all(t_mlx *mlx)
 {
 	char	**temp;
 
 	ft_swap_n_to_zero(mlx);
-	if (ft_valid_map_size (mlx) == 1)
-		return (1);
-	if (ft_check_map_format (mlx) == 1)
-		return (1);
-	if (ft_check_border (mlx) == 1)
-		return (1);
-	if (ft_valid_chars (mlx) == 1)
-		return (1);
-	if (ft_count_collectibles (mlx) == 1)
-		return (1);
-	if (ft_count_player (mlx) == 1)
-		return (1);
-	if (ft_count_exit (mlx) == 1)
-		return (1);
+	if (ft_valid_map_size (mlx) == 1 || ft_check_map_format (mlx) == 1
+		|| ft_check_border (mlx) == 1 || ft_valid_chars (mlx) == 1
+		|| ft_count_collectibles (mlx) == 1 || ft_count_player (mlx) == 1
+		|| ft_count_exit (mlx) == 1)
+		ft_close (mlx);
 	temp = ft_dup_map(mlx);
 	if (temp == NULL)
-		return (1);
+		ft_close (mlx);
 	ft_find_player(mlx);
 	ft_flood_fill(temp, mlx->player_y, mlx->player_x);
 	ft_flood_fill_check(temp, mlx);
 	ft_free_matrix(temp);
-	return (0);
 }

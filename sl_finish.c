@@ -6,27 +6,36 @@
 /*   By: izanoni <izanoni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/13 16:43:23 by izanoni           #+#    #+#             */
-/*   Updated: 2023/10/17 20:26:41 by izanoni          ###   ########.fr       */
+/*   Updated: 2023/10/18 20:01:45 by izanoni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
+void	ft_close_img(t_mlx *mlx, void **image)
+{
+	if (*image != NULL)
+		mlx_destroy_image(mlx->mlx_ptr, *image);
+}
+
 int	ft_close(t_mlx *mlx)
 {
 	if (mlx->mlx_ptr)
 	{
-		mlx_destroy_image(mlx->mlx_ptr, mlx->bluey_d);
-		mlx_destroy_image(mlx->mlx_ptr, mlx->bluey_l);
-		mlx_destroy_image(mlx->mlx_ptr, mlx->bluey_r);
-		mlx_destroy_image(mlx->mlx_ptr, mlx->bluey_u);
-		mlx_destroy_image(mlx->mlx_ptr, mlx->exit_c);
-		mlx_destroy_image(mlx->mlx_ptr, mlx->exit_o);
-		mlx_destroy_image(mlx->mlx_ptr, mlx->tile);
-		mlx_destroy_image(mlx->mlx_ptr, mlx->wall);
-		mlx_destroy_image(mlx->mlx_ptr, mlx->balloon);
-		mlx_destroy_image(mlx->mlx_ptr, mlx->background);
-		mlx_destroy_window (mlx->mlx_ptr, mlx->win_ptr);
+		ft_close_img(mlx, &mlx->bluey_d);
+		ft_close_img(mlx, &mlx->bluey_l);
+		ft_close_img(mlx, &mlx->bluey_r);
+		ft_close_img(mlx, &mlx->bluey_u);
+		ft_close_img(mlx, &mlx->exit_c);
+		ft_close_img(mlx, &mlx->exit_o);
+		ft_close_img(mlx, &mlx->tile);
+		ft_close_img(mlx, &mlx->wall);
+		ft_close_img(mlx, &mlx->balloon);
+		ft_close_img(mlx, &mlx->background);
+		if (mlx->win_ptr)
+		{
+			mlx_destroy_window (mlx->mlx_ptr, mlx->win_ptr);
+		}
 		mlx_destroy_display(mlx->mlx_ptr);
 	}
 	ft_free_matrix(mlx->map);
