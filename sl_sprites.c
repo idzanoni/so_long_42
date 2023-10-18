@@ -6,7 +6,7 @@
 /*   By: izanoni <izanoni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/13 15:26:24 by izanoni           #+#    #+#             */
-/*   Updated: 2023/10/15 21:36:54 by izanoni          ###   ########.fr       */
+/*   Updated: 2023/10/18 16:01:41 by izanoni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,9 @@ void	ft_put_sprites(t_mlx *mlx)
 	ft_xpm_to_img(mlx, &mlx->exit_o, EXIT_O);
 	ft_xpm_to_img(mlx, &mlx->tile, TILE);
 	ft_xpm_to_img(mlx, &mlx->wall, WALL);
-	ft_xpm_to_img(mlx, &mlx->cactus, CACTUS);
 	ft_xpm_to_img(mlx, &mlx->balloon, BALLOON);
-	ft_xpm_to_img(mlx, &mlx->win, WIN);
+	ft_xpm_to_img(mlx, &mlx->background, BACKGROUND);
 	mlx->player = mlx->bluey_d;
-	ft_find_player(mlx);
 }
 
 int	ft_xpm_to_img(t_mlx *mlx, void **image, char *path)
@@ -43,7 +41,7 @@ int	ft_xpm_to_img(t_mlx *mlx, void **image, char *path)
 	return (0);
 }
 
-void	ft_draw_map(t_mlx *mlx)
+int	ft_draw_map(t_mlx *mlx)
 {
 	int	y;
 	int	x;
@@ -51,39 +49,37 @@ void	ft_draw_map(t_mlx *mlx)
 	y = -1;
 	while (mlx->map[++y] != NULL)
 	{
-		x = 0;
-		while (mlx->map[y][x] != '\0')
+		x = -1;
+		while (mlx->map[y][++x] != '\0')
 		{
 			if (mlx->map[y][x] == 'P')
 				ft_img_to_win(mlx, mlx->player, x, y);
 			else if (mlx->map[y][x] == 'C')
 				ft_img_to_win(mlx, mlx->balloon, x, y);
-			else if (mlx->map[y][x] == 'E')
+			else if (mlx->map[y][x] == 'E' && mlx->collect != 0)
+				ft_img_to_win(mlx, mlx->exit_c, x, y);
+			else if (mlx->map[y][x] == 'E' && mlx->collect == 0)
 				ft_img_to_win(mlx, mlx->exit_o, x, y);
 			else if (mlx->map[y][x] == '0')
 				ft_img_to_win(mlx, mlx->tile, x, y);
 			else if (mlx->map[y][x] == '1')
 				ft_img_to_win(mlx, mlx->wall, x, y);
-			x++;
 		}
 	}
-	ft_put_pix(mlx, 0, 0);
+	ft_adjust_drawing(mlx);
+	return (0);
+}
+
+void	ft_adjust_drawing(t_mlx *mlx)
+{
+	ft_img_to_win(mlx, mlx->background, 0, 0);
 	ft_show_moves(mlx);
 }
 
 void	ft_img_to_win(t_mlx *mlx, void *image, int width, int height)
 {
+	if (image == mlx->wall && !width && !height)
+		return ;
 	mlx_put_image_to_window(mlx->mlx_ptr, mlx->win_ptr, image,
 		width * PIXEL, height * PIXEL);
-}
-
-int	ft_show_moves(t_mlx *mlx)
-{
-	char	*moves;
-
-	mlx_string_put(mlx->mlx_ptr, mlx->win_ptr, 5, 37, 0x01000000, "Moves: ");
-	moves = ft_itoa(mlx->moves);
-	mlx_string_put(mlx->mlx_ptr, mlx->win_ptr, 50, 37, 0x01000000, moves);
-	free(moves);
-	return (0);
 }

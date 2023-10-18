@@ -6,7 +6,7 @@
 /*   By: izanoni <izanoni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/13 15:41:18 by izanoni           #+#    #+#             */
-/*   Updated: 2023/10/15 21:36:16 by izanoni          ###   ########.fr       */
+/*   Updated: 2023/10/18 16:31:32 by izanoni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,10 @@ int	ft_valid_map_name(int arg_c, char **arg_v)
 
 	if (arg_c != 2)
 	{
-		ft_printf("Error:\nMissing map\n");
+		if (arg_c < 2)
+			ft_printf("Error:\nMissing map\n");
+		if (arg_c > 2)
+			ft_printf("Error:\nToo many arguments\n");
 		return (1);
 	}
 	size = ft_strlen(arg_v[1]);
@@ -95,7 +98,7 @@ int	ft_valid_chars(t_mlx *mlx)
 		{
 			if (mlx->map[y][x] != '0' && mlx->map[y][x] != 'E'
 				&& mlx->map[y][x] != 'P' && mlx->map[y][x] != 'C'
-				&& mlx->map[y][x] != '1' && mlx->map[y][x] != '\n')
+				&& mlx->map[y][x] != '1')
 			{
 				ft_printf("Error:\nInvalid char on map\n");
 				ft_close(mlx);

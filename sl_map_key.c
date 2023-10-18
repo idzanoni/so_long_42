@@ -6,7 +6,7 @@
 /*   By: izanoni <izanoni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/13 15:45:30 by izanoni           #+#    #+#             */
-/*   Updated: 2023/10/15 21:36:40 by izanoni          ###   ########.fr       */
+/*   Updated: 2023/10/17 20:42:48 by izanoni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	ft_key(int key, t_mlx *mlx)
 {
 	if (key == XK_Escape)
 		ft_close (mlx + \
-		ft_printf ("Closing the window and ending the program...\n") * 0);
+		ft_printf ("Closing the window and ending the game...\n") * 0);
 	else if (key == XK_d || key == XK_D || key == XK_Right)
 	{
 		mlx->player = mlx->bluey_r;
@@ -72,26 +72,25 @@ int	ft_key(int key, t_mlx *mlx)
 
 int	ft_key_moves(t_mlx *mlx, int sum_y, int sum_x)
 {
-	if (mlx->map[mlx->player_line + sum_y][mlx->player_col + sum_x] == '0'
-		|| mlx->map[mlx->player_line + sum_y][mlx->player_col + sum_x] == 'C')
+	if (mlx->map[mlx->player_y + sum_y][mlx->player_x + sum_x] == '0'
+		|| mlx->map[mlx->player_y + sum_y][mlx->player_x + sum_x] == 'C')
 	{
-		if (mlx->map[mlx->player_line + sum_y][mlx->player_col + sum_x] == 'C')
+		if (mlx->map[mlx->player_y + sum_y][mlx->player_x + sum_x] == 'C')
 			mlx->collect --;
-		mlx->map[mlx->player_line + sum_y][mlx->player_col + sum_x] = 'P';
-		mlx->map[mlx->player_line][mlx->player_col] = '0';
+		mlx->map[mlx->player_y + sum_y][mlx->player_x + sum_x] = 'P';
+		mlx->map[mlx->player_y][mlx->player_x] = '0';
 		mlx->moves ++;
-		mlx->player_line = mlx->player_line + sum_y;
-		mlx->player_col = mlx->player_col + sum_x;
+		mlx->player_y = mlx->player_y + sum_y;
+		mlx->player_x = mlx->player_x + sum_x;
 	}
-	if (mlx->map[mlx->player_line + sum_y][mlx->player_col + sum_x] == 'E' \
+	else if (mlx->map[mlx->player_y + sum_y][mlx->player_x + sum_x] == 'E' \
 		&& mlx->collect == 0)
 	{
-		mlx->map[mlx->player_line][mlx->player_col] = '0';
+		mlx->map[mlx->player_y][mlx->player_x] = '0';
 		mlx->moves ++;
 		ft_printf("\nNice park spot, Rita!\n");
 		ft_close(mlx);
 	}
-	ft_draw_map(mlx);
 	return (1);
 }
 
@@ -108,8 +107,8 @@ void	ft_find_player(t_mlx *mlx)
 		{
 			if (mlx->map[y][x] == 'P')
 			{
-				mlx->player_col = x;
-				mlx->player_line = y;
+				mlx->player_x = x;
+				mlx->player_y = y;
 				return ;
 			}	
 			x++;

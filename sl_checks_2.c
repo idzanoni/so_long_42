@@ -6,7 +6,7 @@
 /*   By: izanoni <izanoni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/13 15:41:18 by izanoni           #+#    #+#             */
-/*   Updated: 2023/10/15 21:28:13 by izanoni          ###   ########.fr       */
+/*   Updated: 2023/10/18 16:52:47 by izanoni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	ft_check_map_format(t_mlx *mlx)
 	y = 0;
 	while (mlx->map[y] != NULL)
 	{
-		if (ft_strlen(mlx->map[y]) != mlx->width)
+		if ((int)ft_strlen(mlx->map[y]) != mlx->width)
 		{
 			ft_printf ("Error:\nThe map must be rectangular\n");
 			ft_close (mlx);
@@ -52,7 +52,7 @@ int	ft_count_player(t_mlx *mlx)
 	}
 	if (player != 1)
 	{
-		ft_printf("Error:\nWrong number of players\n");
+		ft_printf("Error:\nInvalid number of Players\n");
 		ft_close(mlx);
 	}
 	return (0);
@@ -81,14 +81,43 @@ int	ft_count_exit(t_mlx *mlx)
 	}
 	if (exit != 1)
 	{
-		ft_printf("Error:\nWrong number of exits\n");
+		ft_printf("Error:\nInvalid number of Exits\n");
 		ft_close(mlx);
 	}
 	return (0);
 }
 
+char	**ft_dup_map(t_mlx *mlx)
+{
+	int		y;
+	char	**copy;
+
+	copy = malloc((mlx->height + 1) * sizeof(char *));
+	if (copy == NULL)
+	{
+		ft_printf("Error:\nMemory error\n");
+		ft_close(mlx);
+	}	
+	y = 0;
+	while (mlx->map[y] != NULL)
+	{
+		copy[y] = ft_strdup(mlx->map[y]);
+		if (copy[y] == NULL)
+		{
+			ft_free_matrix(copy);
+			ft_printf("Error:\nMemory error\n");
+			ft_close(mlx);
+		}
+		y++;
+	}
+	copy[y] = NULL;
+	return (copy);
+}
+
 int	ft_check_all(t_mlx *mlx)
 {
+	char	**temp;
+
 	ft_swap_n_to_zero(mlx);
 	if (ft_valid_map_size (mlx) == 1)
 		return (1);
@@ -104,5 +133,12 @@ int	ft_check_all(t_mlx *mlx)
 		return (1);
 	if (ft_count_exit (mlx) == 1)
 		return (1);
+	temp = ft_dup_map(mlx);
+	if (temp == NULL)
+		return (1);
+	ft_find_player(mlx);
+	ft_flood_fill(temp, mlx->player_y, mlx->player_x);
+	ft_flood_fill_check(temp, mlx);
+	ft_free_matrix(temp);
 	return (0);
 }

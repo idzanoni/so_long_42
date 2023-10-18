@@ -6,11 +6,17 @@
 /*   By: izanoni <izanoni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/13 16:37:52 by izanoni           #+#    #+#             */
-/*   Updated: 2023/10/15 21:36:30 by izanoni          ###   ########.fr       */
+/*   Updated: 2023/10/17 20:54:27 by izanoni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
+
+void	ft_init_game(t_mlx *mlx)
+{
+	ft_find_player(mlx);
+	ft_put_sprites(mlx);
+}
 
 char	**ft_read_map(char **argv)
 {
@@ -48,10 +54,8 @@ void	ft_struct_init(t_mlx *mlx)
 	mlx->player = NULL;
 	mlx->collect = 0;
 	mlx->moves = 0;
-	mlx->col = 0;
-	mlx->line = 0;
-	mlx->player_line = 0;
-	mlx->player_col = 0;
+	mlx->player_y = 0;
+	mlx->player_x = 0;
 	mlx->bluey_d = NULL;
 	mlx->bluey_l = NULL;
 	mlx->bluey_r = NULL;
@@ -60,28 +64,8 @@ void	ft_struct_init(t_mlx *mlx)
 	mlx->exit_o = NULL;
 	mlx->tile = NULL;
 	mlx->wall = NULL;
-	mlx->cactus = NULL;
 	mlx->balloon = NULL;
-	mlx->win = NULL;
-}
-
-void	ft_put_pix(t_mlx *mlx, int width, int height)
-{
-	int	i;
-	int	c;
-
-	c = 0;
-	while (c <= PIXEL)
-	{
-		i = 0;
-		while (i <= PIXEL)
-		{
-			mlx_pixel_put(mlx->mlx_ptr, mlx->win_ptr,
-				(width + c), (height + i), 0xaa78AB02);
-			i++;
-		}
-		c++;
-	}
+	mlx->background = NULL;
 }
 
 void	ft_swap_n_to_zero(t_mlx *mlx)
@@ -104,25 +88,13 @@ void	ft_swap_n_to_zero(t_mlx *mlx)
 	}
 }
 
-// char	**ft_dup_map(t_mlx *mlx)
-// {
-// 	int		y;
-// 	int		x;
-// 	char	**copy;
+int	ft_show_moves(t_mlx *mlx)
+{
+	char	*moves;
 
-// 	copy = malloc((mlx->line + 1) * sizeof(char *));
-// 	y = 0;
-// 	while (mlx->map[y] != NULL)
-// 	{
-// 		copy[y] = ft_strdup(mlx->map[y]);
-// 		if (copy[y] == NULL)
-// 		{
-// 			ft_free_matrix(copy);
-// 			return (NULL);
-// 		}
-// 		copy[y][mlx->col] = '\0';
-// 		y++;
-// 	}
-// 	copy[y] = NULL;
-// 	return (copy);
-// }
+	mlx_string_put(mlx->mlx_ptr, mlx->win_ptr, 5, 37, 0x01000000, "Moves: ");
+	moves = ft_itoa(mlx->moves);
+	mlx_string_put(mlx->mlx_ptr, mlx->win_ptr, 50, 37, 0x01000000, moves);
+	free(moves);
+	return (0);
+}
